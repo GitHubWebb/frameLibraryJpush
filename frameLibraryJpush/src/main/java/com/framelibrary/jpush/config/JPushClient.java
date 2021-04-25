@@ -61,11 +61,22 @@ public class JPushClient {
     public void registerJPush(String alias) {
         //将设备IDuserid设置为别名
         // JPushInterface.setAlias(mContext, StringUtil.deleteCharString(DeviceUtils.getDeviceId(SenyintApplication.getInstance().getContext()), '-') + SPUtil.getUserInfo().getId(), StringUtil.tagAlias);
+        registerJPush(getTagAliasBean(alias));
+    }
+
+    //注册极光推送
+    public void registerJPush(JPushTagAliasOperatorHelper.TagAliasBean tagAliasBean) {
+        //将设备IDuserid设置为别名
+        // JPushInterface.setAlias(mContext, StringUtil.deleteCharString(DeviceUtils.getDeviceId(SenyintApplication.getInstance().getContext()), '-') + SPUtil.getUserInfo().getId(), StringUtil.tagAlias);
         JPushTagAliasOperatorHelper.getInstance().handleAction(
-                new JPushTagAliasOperatorHelper.TagAliasBean()
-                        .setAliasAction(true)
-                        .setAction(JPushTagAliasOperatorHelper.ACTION_SET)
-                        .setAlias(true, alias));
+                tagAliasBean);
+    }
+
+    private JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
+        return new JPushTagAliasOperatorHelper.TagAliasBean()
+                .setAliasAction(true)
+                .setAction(JPushTagAliasOperatorHelper.ACTION_SET)
+                .setAlias(true, alias);
     }
 
     //退出极光推送
@@ -73,10 +84,7 @@ public class JPushClient {
         //将空设置为别名
         JPushTagAliasOperatorHelper.getInstance().handleActionClearAll();
         JPushTagAliasOperatorHelper.getInstance().handleAction(
-                new JPushTagAliasOperatorHelper.TagAliasBean()
-                        .setAliasAction(true)
-                        .setAction(JPushTagAliasOperatorHelper.ACTION_SET)
-                        .setAlias(true, ""));
+                getTagAliasBean(""));
 
     }
 
@@ -84,7 +92,7 @@ public class JPushClient {
         return iNoticeReceiverUtil;
     }
 
-    class JPushConfigBean {
+    public class JPushConfigBean {
         INoticeReceiverUtil noticeReceiverUtil;
         String metaKey;
         String metaData;

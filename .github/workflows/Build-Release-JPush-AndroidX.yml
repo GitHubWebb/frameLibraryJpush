@@ -18,7 +18,7 @@ jobs:
       #  with:
       #    token: ${{ secrets.GITHUB_TOKEN }}
       - name: current release suffix
-        run:  echo "releaseSuffix=-jpush" >> $GITHUB_ENV
+        run:  echo "releaseSuffix=-SNAPSHOT" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
         with:
