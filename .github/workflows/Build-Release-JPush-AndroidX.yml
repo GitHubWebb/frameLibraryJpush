@@ -39,7 +39,7 @@ jobs:
 
           if [ ! `git tag` ]; then
             echo " GIT TAG IS NULL"
-            CURRENT_TAG_NAME=1.0.0
+            CURRENT_TAG_NAME=0.0.1
           else
             echo "GIT TAG NOT NULL"
 
@@ -53,7 +53,7 @@ jobs:
                   echo 'include'
               else
                   echo 'exclusive'
-                  CURRENT_TAG_NAME=1.0.0
+                  CURRENT_TAG_NAME=0.0.1
               fi
 
           echo "CURRENT_TAG_NAME IS $CURRENT_TAG_NAME"
@@ -87,7 +87,7 @@ jobs:
 
       - name: Generate changelog
         id: changelog
-        uses: metcalfc/changelog-generator@v0.4.4
+        uses: metcalfc/changelog-generator@v1.0.0
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
 
