@@ -2,7 +2,6 @@ package com.framelibrary.jpush.config;
 
 import android.content.Context;
 
-import com.framelibrary.config.FrameLibBaseApplication;
 import com.framelibrary.jpush.event.JPushTagAliasOperatorHelper;
 import com.framelibrary.jpush.receiver.INoticeReceiverUtil;
 import com.framelibrary.util.DeviceUtils;
@@ -98,9 +97,10 @@ public class JPushClient {
 
     /**
      * 获取极光注册成功后,极光生成的唯一设备ID
+     * @return
      */
-    public void getRegistrationID(Context context) {
-        JPushInterface.getRegistrationID(context);
+    public String getRegistrationID(Context context) {
+        return JPushInterface.getRegistrationID(context);
     }
 
     public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
