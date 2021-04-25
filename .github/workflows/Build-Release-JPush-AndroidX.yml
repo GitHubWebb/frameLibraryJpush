@@ -44,7 +44,6 @@ jobs:
             echo "GIT TAG NOT NULL"
 
           branch_name=` git symbolic-ref -q --short HEAD || git describe --tags --exact-match `
-
           CURRENT_TAG_NAME=` git describe --tag $(git rev-parse --verify refs/remotes/origin/$branch_name"") `
           fi
 
