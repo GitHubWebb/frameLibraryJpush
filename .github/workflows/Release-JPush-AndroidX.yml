@@ -27,7 +27,7 @@ jobs:
       - name: Envinfo
         run: npx envinfo
 
-      - name: Build application
+#      - name: Build application
 #        run: |
 #          echo ` git log --first-parent --pretty=%d | grep -m1 tag: `
 #          yarn install  && chmod +x gradlew && ./gradlew build && ./gradlew assembleRelease
