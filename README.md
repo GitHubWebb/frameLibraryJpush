@@ -6,6 +6,7 @@
 
 ## 引用方式
 [![](https://jitpack.io/v/GitHubWebb/frameLibraryJpush.svg)](https://jitpack.io/#GitHubWebb/frameLibraryJpush)
+[![Github Actions JPush-AndroidX](https://github.com/GitHubWebb/frameLibraryJpush/actions/workflows/Build-Release-JPush-AndroidX.yml/badge.svg)](https://github.com/GitHubWebb/frameLibraryJpush/actions/workflows/Build-Release-JPush-AndroidX.yml)
 
 ## 使用方式
 1. 必须先在项目初始化的时候先调用 JPushClient#init(Context context, JPushConfigBean configBean)  配置实现类
