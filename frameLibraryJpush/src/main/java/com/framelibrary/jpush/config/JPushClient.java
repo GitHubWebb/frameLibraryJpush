@@ -72,7 +72,7 @@ public class JPushClient {
                 tagAliasBean);
     }
 
-    private JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
+    public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
         return new JPushTagAliasOperatorHelper.TagAliasBean()
                 .setAliasAction(true)
                 .setAction(JPushTagAliasOperatorHelper.ACTION_SET)
