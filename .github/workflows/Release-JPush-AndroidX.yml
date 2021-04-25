@@ -74,6 +74,11 @@ jobs:
           echo "branchName=$branch_name" >> $GITHUB_ENV
           echo "current_tag_name=$CURRENT_TAG_NAME" >> $GITHUB_ENV
           echo "tag_name=$TAG_VERSION_NAME" >> $GITHUB_ENV
+
+          echo `git log --oneline `
+
+          ${{ steps.changelog.outputs.changelog }}
+
         # 循环验证当前git是否存在TAG_VERSION_NAME,如果存在则尾号+1   -z 判断是空
         # while [ -z "$(echo ` git rev-parse --verify --quiet $TAG_VERSION_NAME `)" ]
         # 如果当前git中存在生成的git Tag版本,则尾号+1
