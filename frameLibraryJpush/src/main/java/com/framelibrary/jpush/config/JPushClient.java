@@ -2,6 +2,7 @@ package com.framelibrary.jpush.config;
 
 import android.content.Context;
 
+import com.framelibrary.config.FrameLibBaseApplication;
 import com.framelibrary.jpush.event.JPushTagAliasOperatorHelper;
 import com.framelibrary.jpush.receiver.INoticeReceiverUtil;
 import com.framelibrary.util.DeviceUtils;
@@ -70,6 +71,36 @@ public class JPushClient {
         // JPushInterface.setAlias(mContext, StringUtil.deleteCharString(DeviceUtils.getDeviceId(SenyintApplication.getInstance().getContext()), '-') + SPUtil.getUserInfo().getId(), StringUtil.tagAlias);
         JPushTagAliasOperatorHelper.getInstance().handleAction(
                 tagAliasBean);
+    }
+
+    /**
+     * 通知权限是否开启
+     *
+     * @return 0 未开启
+     */
+    public int isNotificationEnabled(Context context) {
+        return JPushInterface.isNotificationEnabled(context);
+    }
+
+    /**
+     * 跳转到应用设置 用于设置通知权限
+     */
+    public void goToAppNotificationSettings(Context context) {
+        JPushInterface.goToAppNotificationSettings(context);
+    }
+
+    /**
+     * 申请定位、存储权限
+     */
+    public void requestPermission(Context context) {
+        JPushInterface.requestPermission(context);
+    }
+
+    /**
+     * 获取极光注册成功后,极光生成的唯一设备ID
+     */
+    public void getRegistrationID(Context context) {
+        JPushInterface.getRegistrationID(context);
     }
 
     public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
