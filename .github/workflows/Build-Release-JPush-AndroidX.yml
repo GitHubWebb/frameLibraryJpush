@@ -37,7 +37,13 @@ jobs:
       - name: Print Get current Tag
         run: |
           branch_name=` git symbolic-ref -q --short HEAD || git describe --tags --exact-match `
-          CURRENT_TAG_NAME=` git describe --tag $(git rev-parse --verify refs/remotes/origin/$branch_name"") `
+
+          try{
+            CURRENT_TAG_NAME=` git describe --tag $(git rev-parse --verify refs/remotes/origin/$branch_name"") `
+          }catch{
+            CURRENT_TAG_NAME=1.0.0
+          }          
+          
           echo "CURRENT_TAG_NAME IS $CURRENT_TAG_NAME"
           if [[ $CURRENT_TAG_NAME =~ ${{ env.releaseSuffix }} ]];
               then
