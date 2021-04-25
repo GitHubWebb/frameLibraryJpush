@@ -69,7 +69,6 @@ jobs:
 
             done
               echo "done is empty by TAG_VERSION_NAME :$TAG_VERSION_NAME"
-              TAG_VERSION_NAME=0.0.1
 
           echo "branchName=$branch_name" >> $GITHUB_ENV
           echo "current_tag_name=$CURRENT_TAG_NAME" >> $GITHUB_ENV
