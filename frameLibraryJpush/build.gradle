@@ -1,0 +1,191 @@
+apply plugin: 'com.android.library'
+apply plugin: 'cn.leo.plugin.magic' //java singleClick用这个
+
+apply plugin: 'maven'
+
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.GitHubWebb'
+
+ext {
+    //记住一下规则,等会导入时注意, 举例compile 'com.dz.bleota:bleota:1.0.0'
+    GITHUB_REPO_PATH = "../GithubUserContent"
+    PUBLISH_GROUP_ID = 'com.wwxframe'
+    PUBLISH_ARTIFACT_ID = 'jpush_aar'
+    PUBLISH_VERSION = '0.0.1-SNAPSHOT'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'https://packages.aliyun.com/maven/repository/2090728-release-CFbIsz/') {
+                authentication(
+                        userName: '606403ac32feb31748ed9f68',
+                        password: ']-LFPl1PRjPT'
+                )
+            }
+            snapshotRepository(url: 'https://packages.aliyun.com/maven/repository/2090728-snapshot-PwCUCP/') {
+                authentication(
+                        userName: '606403ac32feb31748ed9f68',
+                        password: ']-LFPl1PRjPT'
+                )
+            }
+            pom.version = project.PUBLISH_VERSION
+            pom.artifactId = project.PUBLISH_ARTIFACT_ID
+            pom.groupId = project.PUBLISH_GROUP_ID
+        }
+
+        /*mavenDeployer {
+            //本地maven仓库地址,也可以使用远程maven仓库
+            def deployPath = file(project.GITHUB_REPO_PATH)
+            repository(url: "file://${deployPath.absolutePath}")
+            pom.project {
+                groupId project.PUBLISH_GROUP_ID
+                artifactId project.PUBLISH_ARTIFACT_ID
+                version project.PUBLISH_VERSION
+            }
+        }*/
+    }
+}
+
+/*// 源代码一起打包
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+artifacts {
+    archives androidSourcesJar
+}*/
+
+
+//生成文档注释
+task androidJavadocs(type: Javadoc) {
+    failOnError = false
+    source = android.sourceSets.main.java.srcDirs
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    classpath += files(ext.androidJar)
+    destinationDir = file("../GithubUserContent/com/wwxframe/jpush_aar/javadoc/")
+
+}
+//将文档打包成jar
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+//将源码打包
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+//包含文档和源码的aar
+artifacts {
+//    archives androidSourcesJar
+    archives androidJavadocsJar
+}
+
+def SupportVersion = '28.0.0'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion = '26.0.2'
+
+    //忽略图片警告
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
+    lintOptions {
+        abortOnError false
+    }
+
+    dexOptions {
+        dexInProcess true
+
+        jumboMode = true
+        preDexLibraries = true //线程数
+        threadCount = 8
+    }
+
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 26
+
+//        multiDexEnabled true
+
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters "armeabi-v8a", "armeabi-v7a", "x86"
+        }
+
+        javaCompileOptions {
+
+        }
+
+        //新版本Gradle使用注解需加入
+//        javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
+    }
+
+    buildTypes {
+        /* 线下审查环境 */
+        check {
+            debuggable true
+            minifyEnabled true //是否混淆
+            //是否设置zip对齐优化
+            zipAlignEnabled true
+            consumerProguardFiles 'proguard-rules.pro'
+
+        }
+        debug {
+            shrinkResources false // 移除无用的resource文件
+            minifyEnabled false //不启用混淆
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro',
+                    'proguard-fresco.pro'
+            //签名配置
+            signingConfig signingConfigs.debug
+
+        }
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules.pro'
+
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    compileOptions {//使用JAVA8语法解析
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    //noinspection GradleCompatible,GradleCompatible
+    implementation 'androidx.multidex:multidex:2.0.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //    api 'com.android.support:support-media-compat:26.+'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+
+
+    /*此处以JPush 4.0.6 版本为例。*/
+    api 'cn.jiguang.sdk:jpush:4.0.6'
+
+    // 此处以JCore 2.7.6 版本为例。
+    api 'cn.jiguang.sdk:jcore:2.7.6'
+
+    implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.33-androidx') {
+        exclude group: 'com.android.support'
+        exclude group: 'com.squareup.okhttp3'
+        exclude group: 'com.github.bumptech.glide'
+        exclude group: 'org.aspectj', module: 'aspectjrt'
+        exclude group: 'com.google.code.gson', module: 'gson'
+
+    }
+}
