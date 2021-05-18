@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.framelibrary.bean.select.select_popdata.SelectPopDataBean;
 import com.framelibrary.config.DaemonThreadFactory;
+import com.framelibrary.jpush.config.JPushClient;
 import com.framelibrary.ui.activity.select_photo.MultiImageSelectorActivity;
 import com.framelibrary.util.EncryptUtils;
 import com.framelibrary.util.PermissionCheckUtils;
@@ -24,12 +25,10 @@ import com.framelibrary.util.filter.text.EmojiFilter;
 import com.framelibrary.util.filter.text.TextChangedListener;
 import com.framelibrary.util.logutil.LoggerUtils;
 import com.framelibrary.util.select.selectdata.SelectPopWindowLevelLinkageData;
-import com.framelibrary.util.select.selectphoto.FileUtils;
 import com.framelibrary.util.share.DeviceDataShare;
 import com.framelibrary.widget.image.ShowImagesDialog;
 import com.wwx.app.R;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        TextChangedListener.specialStringExcludePointsWatcher(20, (EditText) tvTest1);
 
+        findViewById(R.id.btn_reg_jpush).setOnClickListener(this);
         findViewById(R.id.btn_get_img_mime_type).setOnClickListener(this);
         findViewById(R.id.btn_open_dialog_message).setOnClickListener(this);
         findViewById(R.id.btn_put_sp_test).setOnClickListener(this);
@@ -261,9 +261,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_get_img_mime_type:
-                FileUtils.getMimeType(new File("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511198824138&di=cec97b6363a1bce28b8499a31b78df83&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farchive%2F3e282f8762696b0bbb3ed16a5dc193c718e5aff9.jpg"));
-
+            case R.id.btn_reg_jpush:
+                JPushClient.getInstance().registerJPush("dddd");
                 break;
             case R.id.btn_open_dialog_message:
 

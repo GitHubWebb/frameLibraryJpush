@@ -8,10 +8,13 @@ import android.util.SparseArray;
 import com.framelibrary.config.FrameLibBaseApplication;
 import com.framelibrary.util.DeviceIdUtil;
 import com.framelibrary.util.EncryptUtils;
+import com.framelibrary.util.StringUtils;
 import com.framelibrary.util.ToastUtils;
+import com.framelibrary.util.gsonconverter.GsonUtil;
 import com.framelibrary.util.logutil.LoggerUtils;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
@@ -403,12 +406,31 @@ public class JPushTagAliasOperatorHelper {
 
         // 是否在别名中加入DeviceId
         public TagAliasBean setAlias(boolean isJoinDeviceId, String alias) {
-            alias = DeviceIdUtil.getDeviceId(FrameLibBaseApplication.getInstance().getContext()) + alias;
-//            alias = StringUtil.deleteCharString(DeviceUtils.getDeviceId(SenyintApplication.getInstance().getContext()), '-') + alias;
-            alias = EncryptUtils.encryptMD5ToString(alias);
-            this.alias = alias;
-
+            if (isJoinDeviceId)
+                setAliasByDeviceID(alias);
+            else
+                setAlias(alias);
             return this;
+        }
+
+        /**
+         * 根据设备唯一标识设置极光别名
+         *
+         * @param alias
+         */
+        private void setAliasByDeviceID(String alias) {
+            // 极端认为 当设备唯一标识获取到空的时候,别名设置没有意义反而传输注册错误的值,
+            // 所以当唯一标识为空,则别名为空
+            String deviceIdJSON = DeviceIdUtil.getDeviceId();
+            Map<String, Object> deviceIdMap = GsonUtil.toMaps(deviceIdJSON);
+            String clientId = (String) deviceIdMap.get("clientId");
+            if (StringUtils.isBlank(clientId)) {
+                setAlias("");
+                return;
+            }
+
+            String aliasMD5 = alias = EncryptUtils.encryptMD5ToString(clientId + ":" + alias);
+            setAlias(aliasMD5);
         }
 
         public boolean isAliasAction() {

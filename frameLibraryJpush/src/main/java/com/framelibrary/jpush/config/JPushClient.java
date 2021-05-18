@@ -97,6 +97,7 @@ public class JPushClient {
 
     /**
      * 获取极光注册成功后,极光生成的唯一设备ID
+     *
      * @return
      */
     public String getRegistrationID(Context context) {

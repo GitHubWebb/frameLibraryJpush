@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'cn.leo.plugin.magic' //java singleClick用这个
 
+/*
+
 apply plugin: 'maven'
 
 apply plugin: 'com.github.dcendents.android-maven'
@@ -35,7 +37,8 @@ uploadArchives {
             pom.groupId = project.PUBLISH_GROUP_ID
         }
 
-        /*mavenDeployer {
+        */
+/*mavenDeployer {
             //本地maven仓库地址,也可以使用远程maven仓库
             def deployPath = file(project.GITHUB_REPO_PATH)
             repository(url: "file://${deployPath.absolutePath}")
@@ -44,9 +47,11 @@ uploadArchives {
                 artifactId project.PUBLISH_ARTIFACT_ID
                 version project.PUBLISH_VERSION
             }
-        }*/
+        }*//*
+
     }
 }
+*/
 
 /*// 源代码一起打包
 task androidSourcesJar(type: Jar) {
@@ -174,19 +179,18 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v13:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
 
-
     /*此处以JPush 4.0.6 版本为例。*/
     implementation 'cn.jiguang.sdk:jpush:4.0.6'
 
     // 此处以JCore 2.7.6 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.7.6'
 
-    implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.33-androidx') {
+    implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.34-androidx') {
         exclude group: 'com.android.support'
         exclude group: 'com.squareup.okhttp3'
         exclude group: 'com.github.bumptech.glide'
         exclude group: 'org.aspectj', module: 'aspectjrt'
-        exclude group: 'com.google.code.gson', module: 'gson'
+//        exclude group: 'com.google.code.gson', module: 'gson'
 
     }
 }
