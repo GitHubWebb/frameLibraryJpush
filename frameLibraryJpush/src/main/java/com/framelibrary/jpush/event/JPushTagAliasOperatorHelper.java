@@ -406,7 +406,7 @@ public class JPushTagAliasOperatorHelper {
 
         // 是否在别名中加入DeviceId
         public TagAliasBean setAlias(boolean isJoinDeviceId, String alias) {
-            if (isJoinDeviceId)
+            if (!StringUtils.isBlank(alias) && isJoinDeviceId)
                 setAliasByDeviceID(alias);
             else
                 setAlias(alias);

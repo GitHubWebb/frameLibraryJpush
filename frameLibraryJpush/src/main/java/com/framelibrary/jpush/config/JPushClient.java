@@ -105,10 +105,14 @@ public class JPushClient {
     }
 
     public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
+        return getTagAliasBean(true, alias);
+    }
+
+    public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(boolean isJoinDeviceId, String alias) {
         return new JPushTagAliasOperatorHelper.TagAliasBean()
                 .setAliasAction(true)
                 .setAction(JPushTagAliasOperatorHelper.ACTION_SET)
-                .setAlias(true, alias);
+                .setAlias(isJoinDeviceId, alias);
     }
 
     //退出极光推送
