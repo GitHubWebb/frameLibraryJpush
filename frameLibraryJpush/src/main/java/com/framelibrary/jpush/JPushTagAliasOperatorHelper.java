@@ -1,4 +1,4 @@
-package com.framelibrary.jpush.event;
+package com.framelibrary.jpush;
 
 import android.content.Context;
 import android.os.Handler;
@@ -6,16 +6,11 @@ import android.os.Message;
 import android.util.SparseArray;
 
 import com.framelibrary.config.FrameLibBaseApplication;
-import com.framelibrary.util.DeviceIdUtil;
-import com.framelibrary.util.EncryptUtils;
-import com.framelibrary.util.StringUtils;
+import com.framelibrary.jpush.bean.TagAliasBean;
 import com.framelibrary.util.ToastUtils;
-import com.framelibrary.util.gsonconverter.GsonUtil;
 import com.framelibrary.util.logutil.LoggerUtils;
 
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.JPushMessage;
@@ -23,12 +18,12 @@ import cn.jpush.android.api.JPushMessage;
 import static cn.jpush.android.api.JPushInterface.deleteAlias;
 
 /**
- * @Author: wangweixu
- * @Date: 2021/04/25 10:06:33
+ * @Author : wangweixu
+ * @Date : 2021/04/25 10:06:33
  * @Description: 处理极光别名相关  \n  处理tagalias相关的逻辑
  * @Version: v1.0
  */
-public class JPushTagAliasOperatorHelper {
+class JPushTagAliasOperatorHelper {
     /**
      * 增加
      */
@@ -167,35 +162,36 @@ public class JPushTagAliasOperatorHelper {
             return;
         }
         put(sequence, tagAliasBean);
-        if (tagAliasBean.isAliasAction) {
-            switch (tagAliasBean.action) {
+        if (tagAliasBean.isAliasAction()) {
+            switch (tagAliasBean.getAction()) {
                 case ACTION_GET:
                     JPushInterface.getAlias(context, sequence);
                     break;
                 case ACTION_DELETE:
+                case ACTION_CLEAN:
                     deleteAlias(context, sequence);
                     break;
                 case ACTION_SET:
-                    JPushInterface.setAlias(context, sequence, tagAliasBean.alias);
+                    JPushInterface.setAlias(context, sequence, tagAliasBean.getAlias());
                     break;
                 default:
                     LoggerUtils.D("unsupport alias action type");
                     return;
             }
         } else {
-            switch (tagAliasBean.action) {
+            switch (tagAliasBean.getAction()) {
                 case ACTION_ADD:
-                    JPushInterface.addTags(context, sequence, tagAliasBean.tags);
+                    JPushInterface.addTags(context, sequence, tagAliasBean.getTags());
                     break;
                 case ACTION_SET:
-                    JPushInterface.setTags(context, sequence, tagAliasBean.tags);
+                    JPushInterface.setTags(context, sequence, tagAliasBean.getTags());
                     break;
                 case ACTION_DELETE:
-                    JPushInterface.deleteTags(context, sequence, tagAliasBean.tags);
+                    JPushInterface.deleteTags(context, sequence, tagAliasBean.getTags());
                     break;
                 case ACTION_CHECK:
                     //一次只能check一个tag
-                    String tag = (String) tagAliasBean.tags.toArray()[0];
+                    String tag = (String) tagAliasBean.getTags().toArray()[0];
                     JPushInterface.checkTagBindState(context, sequence, tag);
                     break;
                 case ACTION_GET:
@@ -222,7 +218,7 @@ public class JPushTagAliasOperatorHelper {
                 message.what = DELAY_SEND_ACTION;
                 message.obj = tagAliasBean;
                 delaySendHandler.sendMessageDelayed(message, 1000 * 60);
-                String logs = getRetryStr(tagAliasBean.isAliasAction, tagAliasBean.action, errorCode);
+                String logs = getRetryStr(tagAliasBean.isAliasAction(), tagAliasBean.getAction(), errorCode);
                 ToastUtils.showToast(logs);
                 return true;
             }
@@ -274,6 +270,9 @@ public class JPushTagAliasOperatorHelper {
     }
 
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
+        if (context == null)
+            return;
+
         int sequence = jPushMessage.getSequence();
         LoggerUtils.I("action - onTagOperatorResult, sequence:" + sequence + ",tags:" + jPushMessage.getTags());
         LoggerUtils.I("tags size:" + jPushMessage.getTags().size());
@@ -287,11 +286,11 @@ public class JPushTagAliasOperatorHelper {
         if (jPushMessage.getErrorCode() == 0) {
             LoggerUtils.I("action - modify tag Success,sequence:" + sequence);
             setActionCache.remove(sequence);
-            String logs = getActionStr(tagAliasBean.action) + " tags success";
+            String logs = getActionStr(tagAliasBean.getAction()) + " tags success";
             LoggerUtils.I(logs);
             ToastUtils.showToast(logs);
         } else {
-            String logs = "Failed to " + getActionStr(tagAliasBean.action) + " tags";
+            String logs = "Failed to " + getActionStr(tagAliasBean.getAction()) + " tags";
             if (jPushMessage.getErrorCode() == 6018) {
                 //tag数量超过限制,需要先清除一部分再add
                 logs += ", tags is exceed limit need to clean";
@@ -317,11 +316,11 @@ public class JPushTagAliasOperatorHelper {
         if (jPushMessage.getErrorCode() == 0) {
             LoggerUtils.I("tagBean:" + tagAliasBean);
             setActionCache.remove(sequence);
-            String logs = getActionStr(tagAliasBean.action) + " tag " + jPushMessage.getCheckTag() + " bind state success,state:" + jPushMessage.getTagCheckStateResult();
+            String logs = getActionStr(tagAliasBean.getAction()) + " tag " + jPushMessage.getCheckTag() + " bind state success,state:" + jPushMessage.getTagCheckStateResult();
             LoggerUtils.I(logs);
             ToastUtils.showToast(logs);
         } else {
-            String logs = "Failed to " + getActionStr(tagAliasBean.action) + " tags, errorCode:" + jPushMessage.getErrorCode();
+            String logs = "Failed to " + getActionStr(tagAliasBean.getAction()) + " tags, errorCode:" + jPushMessage.getErrorCode();
             LoggerUtils.E(logs);
             if (!RetryActionIfNeeded(jPushMessage.getErrorCode(), tagAliasBean)) {
                 ToastUtils.showToast(logs);
@@ -342,11 +341,11 @@ public class JPushTagAliasOperatorHelper {
         if (jPushMessage.getErrorCode() == 0) {
             LoggerUtils.I("action - modify alias Success,sequence:" + sequence);
             setActionCache.remove(sequence);
-            String logs = getActionStr(tagAliasBean.action) + " alias success";
+            String logs = getActionStr(tagAliasBean.getAction()) + " alias success";
             LoggerUtils.I(logs);
             ToastUtils.showToast(logs);
         } else {
-            String logs = "Failed to " + getActionStr(tagAliasBean.action) + " alias, errorCode:" + jPushMessage.getErrorCode();
+            String logs = "Failed to " + getActionStr(tagAliasBean.getAction()) + " alias, errorCode:" + jPushMessage.getErrorCode();
             LoggerUtils.E(logs);
             if (!RetryActionIfNeeded(jPushMessage.getErrorCode(), tagAliasBean)) {
                 ToastUtils.showToast(logs);
@@ -370,88 +369,4 @@ public class JPushTagAliasOperatorHelper {
             }
         }
     }
-
-    public static class TagAliasBean {
-        private int action;
-        private Set<String> tags;
-        private String alias;
-        private boolean isAliasAction;
-
-        public int getAction() {
-            return action;
-        }
-
-        public TagAliasBean setAction(int action) {
-            this.action = action;
-            return this;
-        }
-
-        public Set<String> getTags() {
-            return tags;
-        }
-
-        public TagAliasBean setTags(Set<String> tags) {
-            this.tags = tags;
-            return this;
-        }
-
-        public String getAlias() {
-            return alias;
-        }
-
-        public TagAliasBean setAlias(String alias) {
-            this.alias = alias;
-            return this;
-        }
-
-        // 是否在别名中加入DeviceId
-        public TagAliasBean setAlias(boolean isJoinDeviceId, String alias) {
-            if (!StringUtils.isBlank(alias) && isJoinDeviceId)
-                setAliasByDeviceID(alias);
-            else
-                setAlias(alias);
-            return this;
-        }
-
-        /**
-         * 根据设备唯一标识设置极光别名
-         *
-         * @param alias
-         */
-        private void setAliasByDeviceID(String alias) {
-            // 极端认为 当设备唯一标识获取到空的时候,别名设置没有意义反而传输注册错误的值,
-            // 所以当唯一标识为空,则别名为空
-            String deviceIdJSON = DeviceIdUtil.getDeviceId();
-            Map<String, Object> deviceIdMap = GsonUtil.toMaps(deviceIdJSON);
-            String clientId = (String) deviceIdMap.get("clientId");
-            if (StringUtils.isBlank(clientId)) {
-                setAlias("");
-                return;
-            }
-
-            String aliasMD5 = alias = EncryptUtils.encryptMD5ToString(clientId + ":" + alias);
-            setAlias(aliasMD5);
-        }
-
-        public boolean isAliasAction() {
-            return isAliasAction;
-        }
-
-        public TagAliasBean setAliasAction(boolean aliasAction) {
-            isAliasAction = aliasAction;
-            return this;
-        }
-
-        @Override
-        public String toString() {
-            return "TagAliasBean{" +
-                    "action=" + action +
-                    ", tags=" + tags +
-                    ", alias='" + alias + '\'' +
-                    ", isAliasAction=" + isAliasAction +
-                    '}';
-        }
-    }
-
-
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.framelibrary.jpush.config.JPushClient;
+import com.framelibrary.jpush.JPushClient;
 import com.framelibrary.util.logutil.LoggerUtils;
 
 import org.json.JSONException;

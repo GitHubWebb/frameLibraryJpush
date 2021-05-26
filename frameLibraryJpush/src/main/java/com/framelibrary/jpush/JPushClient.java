@@ -1,12 +1,13 @@
-package com.framelibrary.jpush.config;
+package com.framelibrary.jpush;
 
 import android.content.Context;
 
-import com.framelibrary.jpush.event.JPushTagAliasOperatorHelper;
+import com.framelibrary.jpush.bean.TagAliasBean;
 import com.framelibrary.jpush.receiver.INoticeReceiverUtil;
 import com.framelibrary.util.DeviceUtils;
 
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.JPushMessage;
 
 
 /**
@@ -18,7 +19,7 @@ import cn.jpush.android.api.JPushInterface;
 public class JPushClient {
 
     //使用volatile修饰 目的是为了在JVM层编译顺序一致
-    private static volatile JPushClient jpushReceiver = null;
+    private static volatile JPushClient jPushClient = null;
     private INoticeReceiverUtil iNoticeReceiverUtil; // 有实现类实现具体方法逻辑
 
     private JPushClient() {
@@ -27,16 +28,20 @@ public class JPushClient {
     public static JPushClient getInstance() {
 
         //第一次校验
-        if (jpushReceiver == null) {
+        if (jPushClient == null) {
             synchronized (JPushClient.class) {
 
                 //第二次校验
-                if (jpushReceiver == null) {
-                    jpushReceiver = new JPushClient();
+                if (jPushClient == null) {
+                    jPushClient = new JPushClient();
                 }
             }
         }
-        return jpushReceiver;
+        return jPushClient;
+    }
+
+    public INoticeReceiverUtil getiNoticeReceiverUtil() {
+        return iNoticeReceiverUtil;
     }
 
     /**
@@ -58,18 +63,19 @@ public class JPushClient {
     }
 
     //注册极光推送
-    public void registerJPush(String alias) {
+    public TagAliasBean registerJPush(String alias) {
         //将设备IDuserid设置为别名
         // JPushInterface.setAlias(mContext, StringUtil.deleteCharString(DeviceUtils.getDeviceId(SenyintApplication.getInstance().getContext()), '-') + SPUtil.getUserInfo().getId(), StringUtil.tagAlias);
-        registerJPush(getTagAliasBean(alias));
+        return registerJPush(getTagAliasBean(alias));
     }
 
     //注册极光推送
-    public void registerJPush(JPushTagAliasOperatorHelper.TagAliasBean tagAliasBean) {
+    public TagAliasBean registerJPush(TagAliasBean tagAliasBean) {
         //将设备IDuserid设置为别名
         // JPushInterface.setAlias(mContext, StringUtil.deleteCharString(DeviceUtils.getDeviceId(SenyintApplication.getInstance().getContext()), '-') + SPUtil.getUserInfo().getId(), StringUtil.tagAlias);
         JPushTagAliasOperatorHelper.getInstance().handleAction(
                 tagAliasBean);
+        return tagAliasBean;
     }
 
     /**
@@ -104,12 +110,12 @@ public class JPushClient {
         return JPushInterface.getRegistrationID(context);
     }
 
-    public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(String alias) {
+    public TagAliasBean getTagAliasBean(String alias) {
         return getTagAliasBean(true, alias);
     }
 
-    public JPushTagAliasOperatorHelper.TagAliasBean getTagAliasBean(boolean isJoinDeviceId, String alias) {
-        return new JPushTagAliasOperatorHelper.TagAliasBean()
+    public TagAliasBean getTagAliasBean(boolean isJoinDeviceId, String alias) {
+        return new TagAliasBean()
                 .setAliasAction(true)
                 .setAction(JPushTagAliasOperatorHelper.ACTION_SET)
                 .setAlias(isJoinDeviceId, alias);
@@ -124,8 +130,45 @@ public class JPushClient {
 
     }
 
-    public INoticeReceiverUtil getiNoticeReceiverUtil() {
-        return iNoticeReceiverUtil;
+    /**
+     * @Author:         wangweixu
+     * @Date:           2021/05/25 13:59:28
+     * @Description:    标签运算结果
+     * @Version:        v1.0
+     */
+    public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
+        JPushTagAliasOperatorHelper.getInstance().onTagOperatorResult(context, jPushMessage);
+    }
+
+
+    /**
+     * @Author:         wangweixu
+     * @Date:           2021/05/25 14:00:20
+     * @Description:    检查标签运算符结果
+     * @Version:        v1.0
+     */
+    public void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
+        JPushTagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context,jPushMessage);
+    }
+
+    /**
+     * @Author:         wangweixu
+     * @Date:           2021/05/25 14:01:28
+     * @Description:    别名运算符结果
+     * @Version:        v1.0
+     */
+    public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
+        JPushTagAliasOperatorHelper.getInstance().onAliasOperatorResult(context, jPushMessage);
+    }
+
+    /**
+     * @Author:         wangweixu
+     * @Date:           2021/05/25 14:02:35
+     * @Description:    手机号码运营商结果
+     * @Version:        v1.0
+     */
+    public void onMobileNumberOperatorResult(Context context, JPushMessage jPushMessage) {
+        JPushTagAliasOperatorHelper.getInstance().onMobileNumberOperatorResult(context, jPushMessage);
     }
 
     public class JPushConfigBean {

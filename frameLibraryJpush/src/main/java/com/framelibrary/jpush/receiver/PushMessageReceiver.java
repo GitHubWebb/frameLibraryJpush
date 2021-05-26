@@ -2,7 +2,7 @@ package com.framelibrary.jpush.receiver;
 
 import android.content.Context;
 
-import com.framelibrary.jpush.event.JPushTagAliasOperatorHelper;
+import com.framelibrary.jpush.JPushClient;
 import com.framelibrary.util.logutil.LoggerUtils;
 
 import cn.jpush.android.api.JPushMessage;
@@ -18,26 +18,26 @@ public class PushMessageReceiver extends JPushMessageReceiver {
 
     @Override
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
-        JPushTagAliasOperatorHelper.getInstance().onTagOperatorResult(context, jPushMessage);
+        JPushClient.getInstance().onTagOperatorResult(context, jPushMessage);
         super.onTagOperatorResult(context, jPushMessage);
     }
 
     @Override
     public void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
-        JPushTagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context, jPushMessage);
+        JPushClient.getInstance().onCheckTagOperatorResult(context, jPushMessage);
         super.onCheckTagOperatorResult(context, jPushMessage);
     }
 
     @Override
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
-        JPushTagAliasOperatorHelper.getInstance().onAliasOperatorResult(context, jPushMessage);
+        JPushClient.getInstance().onAliasOperatorResult(context, jPushMessage);
         super.onAliasOperatorResult(context, jPushMessage);
         LoggerUtils.I("===别名返回" + jPushMessage.toString());
     }
 
     @Override
     public void onMobileNumberOperatorResult(Context context, JPushMessage jPushMessage) {
-        JPushTagAliasOperatorHelper.getInstance().onMobileNumberOperatorResult(context, jPushMessage);
+        JPushClient.getInstance().onMobileNumberOperatorResult(context, jPushMessage);
         super.onMobileNumberOperatorResult(context, jPushMessage);
     }
 
