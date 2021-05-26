@@ -12,10 +12,26 @@ import cn.jpush.android.api.JPushMessage;
 
 /**
  * @Author: wangweixu
- * @Date: 2021/04/25 14:23:00
+ * @Date:
  * @Description: 极光推送配置类
  * @Version: v1.0
  */
+
+
+
+ /**
+  * <pre>
+  *      author:         wangweixu
+  *      date:           2021/04/25 14:23:00
+  *      description:    极光推送配置类
+  *      upUser:         更新用户: wangweixu
+  *      upDate:         2021/05/26 11:25:31
+  *      upRemark:       更新说明:
+  *                      闭合@see #JPushTagAliasOperatorHelper 访问权限,
+  *                      由本类对外提供方法
+  *      version:        v1.1
+  * </pre>
+  */
 public class JPushClient {
 
     //使用volatile修饰 目的是为了在JVM层编译顺序一致
@@ -131,10 +147,10 @@ public class JPushClient {
     }
 
     /**
-     * @Author:         wangweixu
-     * @Date:           2021/05/25 13:59:28
-     * @Description:    标签运算结果
-     * @Version:        v1.0
+     * @Author: wangweixu
+     * @Date: 2021/05/25 13:59:28
+     * @Description: 标签运算结果
+     * @Version: v1.0
      */
     public void onTagOperatorResult(Context context, JPushMessage jPushMessage) {
         JPushTagAliasOperatorHelper.getInstance().onTagOperatorResult(context, jPushMessage);
@@ -142,30 +158,30 @@ public class JPushClient {
 
 
     /**
-     * @Author:         wangweixu
-     * @Date:           2021/05/25 14:00:20
-     * @Description:    检查标签运算符结果
-     * @Version:        v1.0
+     * @Author: wangweixu
+     * @Date: 2021/05/25 14:00:20
+     * @Description: 检查标签运算符结果
+     * @Version: v1.0
      */
     public void onCheckTagOperatorResult(Context context, JPushMessage jPushMessage) {
-        JPushTagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context,jPushMessage);
+        JPushTagAliasOperatorHelper.getInstance().onCheckTagOperatorResult(context, jPushMessage);
     }
 
     /**
-     * @Author:         wangweixu
-     * @Date:           2021/05/25 14:01:28
-     * @Description:    别名运算符结果
-     * @Version:        v1.0
+     * @Author: wangweixu
+     * @Date: 2021/05/25 14:01:28
+     * @Description: 别名运算符结果
+     * @Version: v1.0
      */
     public void onAliasOperatorResult(Context context, JPushMessage jPushMessage) {
         JPushTagAliasOperatorHelper.getInstance().onAliasOperatorResult(context, jPushMessage);
     }
 
     /**
-     * @Author:         wangweixu
-     * @Date:           2021/05/25 14:02:35
-     * @Description:    手机号码运营商结果
-     * @Version:        v1.0
+     * @Author: wangweixu
+     * @Date: 2021/05/25 14:02:35
+     * @Description: 手机号码运营商结果
+     * @Version: v1.0
      */
     public void onMobileNumberOperatorResult(Context context, JPushMessage jPushMessage) {
         JPushTagAliasOperatorHelper.getInstance().onMobileNumberOperatorResult(context, jPushMessage);

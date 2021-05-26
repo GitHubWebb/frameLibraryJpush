@@ -182,10 +182,10 @@ dependencies {
     /*此处以JPush 4.0.6 版本为例。*/
     implementation 'cn.jiguang.sdk:jpush:4.0.6'
 
-    // 此处以JCore 2.7.6 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:2.7.6'
+    // 此处以JCore 2.8.2 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.8.2'
 
-    implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.34-androidx') {
+    implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.36-androidx') {
         exclude group: 'com.android.support'
         exclude group: 'com.squareup.okhttp3'
         exclude group: 'com.github.bumptech.glide'
