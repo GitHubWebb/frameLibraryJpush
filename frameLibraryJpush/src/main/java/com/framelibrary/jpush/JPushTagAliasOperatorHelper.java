@@ -122,7 +122,7 @@ class JPushTagAliasOperatorHelper {
     }
 
     public void handleAction(String mobileNumber) {
-        Context context = FrameLibBaseApplication.getInstance().getContext();
+        Context context = ApplicationUtil.getInstance().getApplication();
         // sequence 代表一个序号，这个是和老方法的主要区别，目的是区分设置的序号，本类静态成员变量，需要注意的是在调用之前一定要先把它+1，不然会有问题
         sequence++;
 
@@ -150,7 +150,7 @@ class JPushTagAliasOperatorHelper {
      * 处理设置tag
      */
     public void handleAction(TagAliasBean tagAliasBean) {
-        Context context = FrameLibBaseApplication.getInstance().getContext();
+        Context context = ApplicationUtil.getInstance().getApplication();
 
         init(context);
 
