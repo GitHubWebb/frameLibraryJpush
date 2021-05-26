@@ -45,7 +45,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation project(path: ':frameLibraryJpush')
-
+//    implementation project(path: ':frameLibraryJpushGit:frameLibraryJpush')
 
     implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.32-androidx') {
         exclude group: 'com.android.support'

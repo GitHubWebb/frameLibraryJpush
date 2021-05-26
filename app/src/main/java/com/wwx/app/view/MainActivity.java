@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.framelibrary.bean.select.select_popdata.SelectPopDataBean;
 import com.framelibrary.config.DaemonThreadFactory;
-import com.framelibrary.jpush.config.JPushClient;
+import com.framelibrary.jpush.JPushClient;
 import com.framelibrary.ui.activity.select_photo.MultiImageSelectorActivity;
 import com.framelibrary.util.EncryptUtils;
 import com.framelibrary.util.PermissionCheckUtils;
