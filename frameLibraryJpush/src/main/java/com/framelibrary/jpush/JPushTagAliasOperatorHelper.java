@@ -7,6 +7,7 @@ import android.util.SparseArray;
 
 import com.framelibrary.config.FrameLibBaseApplication;
 import com.framelibrary.jpush.bean.TagAliasBean;
+import com.framelibrary.util.ApplicationUtil;
 import com.framelibrary.util.ToastUtils;
 import com.framelibrary.util.logutil.LoggerUtils;
 
