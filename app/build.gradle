@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion = 29
+    compileSdkVersion = 30
     buildToolsVersion = "29.0.3"
 
     defaultConfig {
         applicationId "com.wwx.app"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -47,12 +47,12 @@ dependencies {
     implementation project(path: ':frameLibraryJpush')
 //    implementation project(path: ':frameLibraryJpushGit:frameLibraryJpush')
 
-    implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.32-androidx') {
+    /*implementation('com.github.GitHubWebb.frameLibraryWidget:frameLibraryWidget:2.0.32-androidx') {
         exclude group: 'com.android.support'
         exclude group: 'com.squareup.okhttp3'
         exclude group: 'com.github.bumptech.glide'
         exclude group: 'org.aspectj', module: 'aspectjrt'
         exclude group: 'com.google.code.gson', module: 'gson'
 
-    }
+    }*/
 }
